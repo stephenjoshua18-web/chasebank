@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chase Bank Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="chase-bank-symbol.png">
+    <style>
+        /* CSS styles are included within the HTML for simplicity */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            transition: background-color 0.5s ease;
+            color: #333; /* Default text color */
+        }
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .dashboard-header {
+            background-color: #0052cc;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            height: 20px; /* Adjust as needed to fit within the row */
+            width: auto; /* Maintain aspect ratio */
+            vertical-align: middle; /* Align with other items in the row */
+        }
+        .dashboard-nav {
+            display: flex;
+            align-items: center;
+        }
+        .dashboard-nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding-bottom: 5px;
+        }
+        .dashboard-nav a.active {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .notifications {
+            background-color: red;
+            border-radius: 50%;
+            padding: 2px 6px;
+            margin-right: 10px;
+            cursor: pointer; /* Add cursor pointer */
+        }
+        .user-name {
+            font-weight: bold;
+        }
+        .dashboard-main {
+            flex: 1;
+            padding: 20px;
+        }
+        .account-overview, .transactions-list, .recent-activity {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .account-overview h2, .recent-activity h2 {
+            border-bottom: 2px solid #0052cc;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .account-balance {
+            display: flex;
+            flex-direction: column; /* Adjusted for mobile */
+            margin-bottom: 15px;
+        }
+        .account-balance p {
+            margin-bottom: 5px; /* Adjusted for mobile */
+        }
+        .view-transactions-btn {
+            background-color: #0052cc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .transactions-list {
+            display: none; /* Initially hidden */
+        }
+        .credit {
+            color: green;
+        }
+        .debit {
+            color: rgba(237, 13, 13, 0.94);
+        }
+        .dashboard-footer {
+            background-color: #0052cc;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .melissa {
+            color: #0052cc;
+        }
+        .amount{
+            font-size: 35px;
+
+        }
+        @media screen and (max-width: 768px) {
+            .dashboard-nav {
+                display: none; /* Hide navigation on smaller screens */
+            }
+            .dashboard-main {
+                padding: 10px; /* Adjust padding for smaller screens */
+            }
+            .account-balance {
+                flex-direction: row; /* Align account balance items horizontally */
+            }
+            .account-balance p {
+                margin-right: 10px; /* Add spacing between account details */
+            }
+        }
+        /* Styles for modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+        .dark-mode .dashboard-header,
+        .dark-mode .dashboard-nav a {
+            color: #fff;
+        }
+        .dark-mode .dashboard-footer {
+            background-color: #222;
+        }
+        .dark-mode .account-overview,
+        .dark-mode .transactions-list,
+        .dark-mode .recent-activity {
+            background-color: #333;
+            color: #fff;
+        }
+        .dark-mode .dashboard-nav a.active {
+            text-decoration: underline;
+            font-weight: bold;
+            color: #fff;
+        }
+        /* Notification popup styles */
+        .notification-popup {
+            position: absolute;
+            top: 50px; /* Adjust position */
+            right: 20px; /* Adjust position */
+            background-color: #333; /* Dark mode background color */
+            color: #fff; /* Dark mode text color */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 100;
+        }
+        .notification {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <a href="index.html"> <img src="logo_white.png" alt="Chase Logo" class="logo"></a>
+            <nav class="dashboard-nav">
+                <a href="#">Home</a>
+                <a href="dashboard.html" class="active">Accounts</a>
+                <a href="cards.html">Card</a>
+                <a href="fundtransfer.html">Fund Transfer</a>
+                <a href="statement.html">Statements</a>
+                <a href="#" onclick="openSettings()">Settings</a> <!-- Added onclick event -->
+            </nav>
+            <div class="user-info">
+                <span class="notifications" onclick="toggleNotifications()">3</span> <!-- Added onclick event -->
+                <span class="user-name">Melissa Wood</span>
+            </div>
+        </header>
+        <main class="dashboard-main">
+            <section class="account-overview">
+                <h2>Account Overview</h2>
+                <div class="account-balance">
+                    <p>Account: <span id="accountNumber">COMMERCIAL CHECKING <span class="account-number-toggle" onclick="toggleAccountNumber()">(...9060)</span></span></p>
+                    <br>
+                    <p class="melissa"><strong><u>Available balance </u></strong></p>
+                    <span class="amount">$30,642.50</span>
+                </div>
+                <button class="view-transactions-btn" onclick="toggleTransactions()">View Credit</button>
+                <button class="view-transactions-btn" onclick="toggleTransaction()">View Debits</button>
+            </section>
+            <div class="transactions-list" id="transactions-list">
+                <!-- Transactions will be listed here -->
+            </div>
+            <section class="recent-activity">
+                <h2>Recent Activity</h2>
+                <marquee behavior="scroll" direction="up" scrollamount="2" height="100">
+                    <p>You just logged in.</p>
+                    <p>You received a wire transfer of $1000 from John Doe.</p>
+                    <p>A new deposit of $500 was made into your savings account.</p>
+                    <!-- More recent activities -->
+                </marquee>
+            </section>
+        </main>
+        <footer class="dashboard-footer">
+            <p>© 2024 Chase Bank. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal for settings -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSettings()">&times;</span>
+            <h2>Settings</h2>
+            <label for="darkModeToggle">Dark Mode:</label>
+            <input type="checkbox" id="darkModeToggle">
+            <label for="darkModeToggle">Enable Dark Mode</label>
+            <!-- Additional settings can be added here -->
+        </div>
+    </div>
+
+    <!-- Script for the notifications feature -->
+    <script>
+        function toggleNotifications() {
+            var popup = document.querySelector('.notification-popup');
+            
+            if (!popup) {
+                popup = document.createElement('div');
+                popup.classList.add('notification-popup');
+                popup.innerHTML = '<div class="notification">Your account balance has been updated</div>' +
+                                  '<div class="notification">A new deposit of $500 has been credited to your savings account</div>' +
+                                  '<div class="notification">You received a wire transfer of $1000 from John Doe</div>';
+                
+                document.body.appendChild(popup);
+            } else {
+                popup.parentNode.removeChild(popup);
+            }
+        }
+
+        function toggleTransactions() {
+            var transactionsList = document.getElementById('transactions-list');
+            if (transactionsList.style.display === 'none' || transactionsList.style.display === '') {
+                transactionsList.style.display = 'block';
+                // Example transactions
+                transactionsList.innerHTML = '<div class="credit">03/01/2024 - Mobile Deposit - $5,000.00</div>' +
+                                             '<div class="credit">03/02/2024 - Wire Transfer - $2,000.00</div>' +
+                                             '<div class="credit">03/01/2024 - Mobile Deposit - $5,000.00</div>' +
+                                             '<div class="credit">03/02/2024 - Wire Transfer - $2,000.00</div>' +
+                                             '<div class="credit">03/02/2024 - Wire Transfer - $2,000.00</div>' +
+                                             '<div class="credit">03/02/2024 - Wire Transfer - $2,000.00</div>';
+                                             // More credits...
+            } else {
+                transactionsList.style.display = 'none';
+            }
+        }
+
+        function toggleTransaction() {
+            var transactionsList = document.getElementById('transactions-list');
+            if (transactionsList.style.display === 'none' || transactionsList.style.display === '') {
+                transactionsList.style.display = 'block';
+                // Example transactions
+                transactionsList.innerHTML = '<div class="debit">03/10/2024 - Online Purchase - -$150.00</div>' +
+                                             '<div class="debit">03/10/2024 - Online Purchase - -$150.00</div>' +
+                                             '<div class="debit">03/10/2024 - Online Purchase - -$150.00</div>' +
+                                             '<div class="debit">03/11/2024 - Utility Bill - -$200.00</div>';
+                                             // More debits...
+            } else {
+                transactionsList.style.display = 'none';
+            }
+        }
+
+        // Function to open settings modal
+        function openSettings() {
+            var modal = document.getElementById('settingsModal');
+            modal.style.display = 'block';
+        }
+
+        // Function to close settings modal and apply dark mode
+        function closeSettings() {
+            var modal = document.getElementById('settingsModal');
+            modal.style.display = 'none';
+            toggleDarkMode(); // Apply dark mode
+        }
+
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            var darkModeToggle = document.getElementById('darkModeToggle');
+            var body = document.body;
+            if (darkModeToggle.checked) {
+                body.classList.add('dark-mode');
+                // Ensure notification popup is visible in dark mode
+                var popup = document.querySelector('.notification-popup');
+                if (popup) {
+                    popup.style.backgroundColor = '#333';
+                    popup.style.color = '#fff';
+                }
+            } else {
+                body.classList.remove('dark-mode');
+                // Reset notification popup style when switching to light mode
+                var popup = document.querySelector('.notification-popup');
+                if (popup) {
+                    popup.style.backgroundColor = '';
+                    popup.style.color = '';
+                }
+            }
+        }
+
+        // Function to toggle account number display
+        function toggleAccountNumber() {
+            var accountNumber = document.getElementById('accountNumber');
+            var accountNumberToggle = document.querySelector('.account-number-toggle');
+            if (accountNumber.classList.contains('full')) {
+                accountNumber.classList.remove('full');
+                accountNumberToggle.innerHTML = '(...9060)';
+            } else {
+                accountNumber.classList.add('full');
+                accountNumberToggle.innerHTML = '1234569060'; // Replace with full account number
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statement of Account</title>
+<link rel="icon" type="image/x-icon" href="chase-bank-symbol.png">
+<style>
+  body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+  .statement-container { max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; background-color: #fff; }
+  .chase-logo { width: 150px; }
+  .statement-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+  .statement-header div, .balance { color: #003366; } /* Dark blue color */
+  .statement-date { margin-bottom: 20px; }
+  .transaction-table { width: 100%; border-collapse: collapse; }
+  .transaction-table th, .transaction-table td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
+  .balance { text-align: right; margin-top: 20px; }
+  .date-range { margin-bottom: 20px; }
+  .credit { color: green; }
+  .debit { color: red; }
+</style>
+</head>
+<body>
+<div class="statement-container">
+  <div class="statement-header">
+    <img src="chasedark.png" alt="Chase Logo" class="chase-logo">
+    <div>
+      <div>Account Number: 2775669060</div>
+      <div>Random Address, City, State, Zip</div>
+    </div>
+  </div>
+  <div class="date-range">
+    <label for="start-date">From:</label>
+    <input type="date" id="start-date">
+    <label for="end-date">To:</label>
+    <input type="date" id="end-date" value="">
+    <button onclick="updateStatement()">Show Statement</button>
+  </div>
+  <table class="transaction-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody id="transaction-body">
+      <!-- Transactions will be inserted here by JavaScript -->
+    </tbody>
+  </table>
+  <div class="balance">Ending Balance: $30,600.00</div>
+</div>
+
+<script>
+  // Seeded random number generator function
+  function seededRandom(seed) {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  }
+
+  // Function to generate random transactions
+  function generateRandomTransactions(startDate, endDate, seed) {
+    const descriptions = ['Mobile Deposit', 'Wire Transfer', 'ATM Withdrawal', 'Payment Received', 'Online Purchase'];
+    const transactions = [];
+    const transactionCount = 10; // Generate 10 transactions
+    for (let i = 0; i < transactionCount; i++) {
+      const date = new Date(startDate.getTime() + seededRandom(seed) * (endDate.getTime() - startDate.getTime()));
+      const description = descriptions[Math.floor(seededRandom(seed) * descriptions.length)];
+      const type = seededRandom(seed) > 0.5 ? 'Credit' : 'Debit';
+      const amount = (seededRandom(seed) * 1000).toFixed(2);
+      transactions.push({ date, description, type, amount });
+      seed++;
+    }
+    return transactions.sort((a, b) => a.date - b.date); // Sort transactions by date
+  }
+
+  // Function to format date
+  function formatDate(date) {
+    return date.toISOString().split('T')[0];
+  }
+
+  // Insert transactions into the table
+  function insertTransactions(transactions) {
+    const tbody = document.getElementById('transaction-body');
+    tbody.innerHTML = ''; // Clear existing transactions
+    transactions.forEach(transaction => {
+      const row = document.createElement('tr');
+      const typeClass = transaction.type === 'Credit' ? 'credit' : 'debit';
+      row.innerHTML = `<td>${formatDate(transaction.date)}</td><td>${transaction.description}</td><td class="${typeClass}">${transaction.type}</td><td class="${typeClass}">$${transaction.amount}</td>`;
+      tbody.appendChild(row);
+    });
+  }
+
+  // Update the statement with the selected date range
+  function updateStatement() {
+    const startDate = new Date(document.getElementById('start-date').value);
+    const endDate = new Date(document.getElementById('end-date').value || new Date());
+    // Use the start date as the seed for the random number generator
+    const seed = startDate.getTime();
+    const randomTransactions = generateRandomTransactions(startDate, endDate, seed);
+    insertTransactions(randomTransactions);
+  }
+
+  // Set default date range to the last 90 days
+  document.getElementById('start-date').value = formatDate(new Date(new Date().setDate(new Date().getDate() - 90)));
+  document.getElementById('end-date').value = formatDate(new Date());
+</script>
+</body>
+</html>
