@@ -60,6 +60,15 @@
         }
         .user-name {
             font-weight: bold;
+            margin-right: 10px; /* Add space between menu icon and user name */
+        }
+        .menu-icon {
+            display: none;
+            cursor: pointer;
+            color: white;
+        }
+        .menu-icon:hover {
+            color: #ccc;
         }
         .dashboard-main {
             flex: 1;
@@ -127,6 +136,37 @@
             }
             .account-balance p {
                 margin-right: 10px; /* Add spacing between account details */
+            }
+            .user-name {
+                margin-right: 5px; /* Adjust space between menu icon and user name */
+            }
+            .menu-icon {
+                display: block; /* Show menu icon on smaller screens */
+            }
+            .menu-icon-container {
+                margin-right: 10px; /* Add space between menu icon and user name */
+            }
+            .menu-icon-container:hover .menu-icon {
+                color: #ccc;
+            }
+            .menu-icon-container:hover .dashboard-nav {
+                display: flex; /* Show navigation when hovering over the menu icon */
+            }
+            .dashboard-nav {
+                position: absolute;
+                top: 50px; /* Adjust top position */
+                right: 0;
+                background-color: #010048;
+                width: 200px;
+                flex-direction: column;
+                padding: 10px;
+                display: none;
+            }
+            .dashboard-nav a {
+                margin: 5px 0;
+            }
+            .dashboard-nav.active {
+                display: flex;
             }
         }
         /* Styles for modal */
@@ -207,14 +247,18 @@
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
+            <div class="menu-icon-container">
+                <span class="menu-icon" onclick="toggleMenu()">&#9776;</span> <!-- Menu Icon for mobile -->
+            </div>
             <a href="index.html"> <img src="logo_white.png" alt="Chase Logo" class="logo"></a>
-            <nav class="dashboard-nav">
+            <nav class="dashboard-nav" id="dashboard-nav">
                 <a href="#">Home</a>
                 <a href="dashboard.html" class="active">Accounts</a>
                 <a href="cards.html">Card</a>
                 <a href="fundtransfer.html">Pay & Transfer</a>
                 <a href="statement.html">Statements</a>
                 <a href="#" onclick="openSettings()">Settings</a> <!-- Added onclick event -->
+                <a href="index.html">Sign Out</a> <!-- Added sign out button -->
             </nav>
             <div class="user-info">
                 <span class="notifications" onclick="toggleNotifications()">3</span> <!-- Added onclick event -->
@@ -265,6 +309,11 @@
 
     <!-- Script for the notifications feature -->
     <script>
+        function toggleMenu() {
+            var nav = document.getElementById('dashboard-nav');
+            nav.classList.toggle('active');
+        }
+
         function toggleNotifications() {
             var popup = document.querySelector('.notification-popup');
             
