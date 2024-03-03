@@ -122,7 +122,6 @@
         }
         .amount{
             font-size: 25px;
-
         }
         @media screen and (max-width: 768px) {
             .dashboard-nav {
@@ -279,8 +278,8 @@
                 <div class="account-balance">
                     <p>Account: <span id="accountNumber">COMMERCIAL CHECKING <span class="account-number-toggle" onclick="toggleAccountNumber()">(...9060)</span></span></p>
                     <br>
-                    <p class="melissa"><strong><u>Available balance </u></strong></p>
-                    <span class="amount">$150,000,000.00</span>
+                    <p class="melissa" onclick="toggleAvailableBalance()"><strong><u> Available Balance</u></strong></p>
+                    <span class="amount" id="availableBalance">$150,000,000.00</span>
                 </div>
                 <button class="view-transactions-btn" onclick="toggleTransactions()">View Credit</button>
                 <button class="view-transactions-btn" onclick="toggleTransaction()">View Debits</button>
@@ -317,6 +316,10 @@
 
     <!-- Script for the notifications feature -->
     <script>
+        let availableBalanceVisible = true;
+        let originalAvailableBalance = "$150,000,000.00";
+        let hiddenAvailableBalance = "******";
+
         function toggleMenu() {
             var nav = document.getElementById('dashboard-nav');
             nav.classList.toggle('active');
@@ -417,6 +420,17 @@
                 accountNumber.classList.add('full');
                 accountNumberToggle.innerHTML = '1234569060'; // Replace with full account number
             }
+        }
+
+        // Function to toggle available balance visibility
+        function toggleAvailableBalance() {
+            var availableBalance = document.getElementById('availableBalance');
+            if (availableBalanceVisible) {
+                availableBalance.innerHTML = hiddenAvailableBalance;
+            } else {
+                availableBalance.innerHTML = originalAvailableBalance;
+            }
+            availableBalanceVisible = !availableBalanceVisible;
         }
     </script>
 </body>
