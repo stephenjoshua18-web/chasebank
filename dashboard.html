@@ -279,10 +279,10 @@
             <section class="account-overview">
                 <h2>Account Overview</h2>
                 <div class="account-balance">
-                    <p>Account: <span id="accountNumber">COMMERCIAL CHECKING <span class="account-number-toggle" onclick="toggleAccountNumber()">(...9060)</span></span></p>
+                    <p>Account: <span id="accountNumber">COMMERCIAL CHECKING <span class="account-number-toggle" onclick="toggleAccountNumber()">(...1762)</span></span></p>
                     <br>
                     <p class="melissa" onclick="toggleAvailableBalance()"><strong><u> Available Balance</u></strong></p>
-                    <span class="amount" id="availableBalance">$150,000,000.00</span>
+                    <span class="amount" id="availableBalance">$10,000,000.00</span>
                 </div>
                 <button class="view-transactions-btn" onclick="toggleTransactions()">View Credit</button>
                 <button class="view-transactions-btn" onclick="toggleTransaction()">View Debits</button>
@@ -294,7 +294,7 @@
                 <h2>Recent Activity</h2>
                 <marquee behavior="scroll" direction="up" scrollamount="2" height="100">
                     <p>You just logged in.</p>
-                    <p>You received a wire transfer of $1000 from John Doe.</p>
+                    <p>You received a wire transfer of $500,000 from Tia Denise.</p>
                     <p>A new deposit of $500 was made into your savings account.</p>
                     <!-- More recent activities -->
                 </marquee>
@@ -320,7 +320,7 @@
     <!-- Script for the notifications feature -->
     <script>
         let availableBalanceVisible = true;
-        let originalAvailableBalance = "$150,000,000.00";
+        let originalAvailableBalance = "$10,000,000.00";
         let hiddenAvailableBalance = "******";
 
         function toggleMenu() {
@@ -335,8 +335,8 @@
                 popup = document.createElement('div');
                 popup.classList.add('notification-popup');
                 popup.innerHTML = '<div class="notification">Your account balance has been updated</div>' +
-                                  '<div class="notification">A new deposit of $500 has been credited to your savings account</div>' +
-                                  '<div class="notification">You received a wire transfer of $1000 from John Doe</div>';
+                                  '<div class="notification">You received a wire transfer of $500,000 from Tia Denise</div>' +
+                                  '<div class="notification">You received a wire transfer of $1000 from </div>';
                 
                 document.body.appendChild(popup);
             } else {
@@ -418,10 +418,10 @@
             var accountNumberToggle = document.querySelector('.account-number-toggle');
             if (accountNumber.classList.contains('full')) {
                 accountNumber.classList.remove('full');
-                accountNumberToggle.innerHTML = '(...9060)';
+                accountNumberToggle.innerHTML = '(...1762)';
             } else {
                 accountNumber.classList.add('full');
-                accountNumberToggle.innerHTML = '1234569060'; // Replace with full account number
+                accountNumberToggle.innerHTML = '2365361762'; // Replace with full account number
             }
         }
 
