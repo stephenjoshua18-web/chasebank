@@ -18,6 +18,16 @@
   .date-range { margin-bottom: 20px; }
   .credit { color: green; }
   .debit { color: red; }
+  @media screen and (max-width: 768px) {
+    .acctno {
+        position: relative;
+        margin-left: 70px; /* Hide navigation on smaller screens */
+    }
+    .address {
+      position: relative;
+      margin-left: 70px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -25,8 +35,9 @@
   <div class="statement-header">
     <img src="chasedark.png" alt="Chase Logo" class="chase-logo">
     <div>
-      <div> Account Number: 2365361762</div>
-      <div>199 Cumming Ave, Maywood, NJ, 07607</div>
+      <div class="acctno"> Account Number: 2365361762</div>
+      <br>
+      <div class="address">199 Cumming Ave, Maywood, NJ, 07607</div>
     </div>
   </div>
   <div class="date-range">
